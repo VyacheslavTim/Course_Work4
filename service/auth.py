@@ -10,7 +10,7 @@ class AuthService:
     def __init__(self, user_service: UserService):
         self.user_service = user_service
 
-    def formation_by_token(self, username, password, is_refresh=False):
+    def created_token(self, username, password, is_refresh=False):
         user = self.user_service.get_by_user(username)
 
         if user is None:
@@ -22,7 +22,7 @@ class AuthService:
 
         data = {
             "username": user.username,
-            "aim": user.aim
+            "role": user.role
         }
 
         access_token_duration = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
@@ -43,4 +43,4 @@ class AuthService:
 
         if user is None:
             raise Exception()
-        return self.formation_by_token(username, user.password, is_refresh=True)
+        return self.created_token(username, user.password, is_refresh=True)
