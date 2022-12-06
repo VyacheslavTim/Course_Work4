@@ -27,7 +27,7 @@ class DirectorView(Resource):
         sm_d = UserSchema().dump(r)
         return sm_d, 200
 
-    def put(self, rid):
+    def patch(self, rid):
         request_json = request.json
         if "id" not in request_json:
             request_json["id"] = rid
@@ -38,4 +38,25 @@ class DirectorView(Resource):
     def delete(self, rid):
         user_service.delete(rid)
         return "", 204
+
+@user_ns.route("/password")
+class UpdateUserPasswordViews(Resource):
+    def put(self):
+        request_json = request.json
+
+        email = request_json.get("email")
+        old_password = request_json.get("password_1")
+        new_password = request_json.get("password_2")
+
+        user = user_service.get_by_email(email)
+
+        if user_service.compare_passwords(user.password, old_password):
+            user.password = user_service.get_hash(new_password)
+            result = UserSchema().dump(user)
+            user_service.update(result)
+        else:
+            print("Data didn't update")
+
+            return "", 201
+
     
