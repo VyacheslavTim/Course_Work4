@@ -21,7 +21,7 @@ class AuthService:
                 raise Exception()
 
         data = {
-            "username": user.username,
+            "username": user.email,
         }
 
         access_token_duration = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)

@@ -21,6 +21,7 @@ class RegisterView(Resource):
         return "User created", 201
 
 
+@auth_ns.route("/login")
 class AuthView(Resource):
     def post(self):
         request_json = request.json
@@ -30,7 +31,7 @@ class AuthView(Resource):
         if None in [email, password]:
             return "", 400
 
-        tokens = auth_service.formation_by_token(email, password)
+        tokens = auth_service.created_token(email, password)
         return tokens, 201
 
     def put(self):
